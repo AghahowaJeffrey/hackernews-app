@@ -10,6 +10,7 @@ from django.views import View
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
 from .models import Story
+from rest_framework.pagination import PageNumberPagination
 from .serializers import StorySerializer
 
 async def fetch_stories_and_comments_async():
@@ -33,14 +34,23 @@ def task_status(request):
     stories = Story.objects.all()
     return HttpResponse(stories)
 
+
+
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class LatestStoriesView(generics.ListAPIView):
     queryset = Story.objects.all().order_by('-time')[:10]  # Get latest 10 stories
     serializer_class = StorySerializer
+    pagination_class = CustomPageNumberPagination
 
 class FilteredStoriesView(generics.ListAPIView):
     serializer_class = StorySerializer
     filter_backends = [SearchFilter]
     search_fields = ['title']
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         filter_param = self.request.query_params.get('filter', '').lower()
@@ -50,7 +60,7 @@ class FilteredStoriesView(generics.ListAPIView):
         elif filter_param == 'show':
             return Story.objects.filter(title__icontains='Show Hn') | Story.objects.filter(title__icontains='show hn')
         elif filter_param == 'job':
-            return Story.objects.filter(url__isnull=True)
+            return Story.objects.filter(title__icontains='hiring')
 
         return Story.objects.none()
 
@@ -58,10 +68,12 @@ class StorySearchView(generics.ListAPIView):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
     filter_backends = [SearchFilter]
+    pagination_class = CustomPageNumberPagination
     search_fields = ['title', 'text']  # Fields to search through
 
 
 
+ 
 
 
 # from django.http import JsonResponse

@@ -1,3 +1,5 @@
+
+
 import asyncio
 import httpx
 from datetime import datetime
@@ -50,7 +52,7 @@ async def fetch_story_and_comments(session, story_id):
                 'text': story_data.get('text', ''),
                 'time': datetime.fromtimestamp(story_data.get('time', 0)),
                 'type': story_data.get('type', 'story'),
-                'url': story_data.get('url', '')
+                'url': story_data.get('url')
             }
         )
 
