@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 django = "*"
 django-apscheduler = "*"
+apscheduler = "*"
+requests = "*"
+httpx = {extras = ["http2"], version = "*"}
 
 [dev-packages]
 
