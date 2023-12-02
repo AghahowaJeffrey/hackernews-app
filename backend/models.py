@@ -9,6 +9,7 @@ class Story(models.Model):
     text = models.TextField()
     type = models.CharField(max_length=20, default='story')
     time = models.DateTimeField()
+    url = models.URLField(max_length=200, null=True)
 
     def __str__(self):
         return f"{self.by} - {self.title}"

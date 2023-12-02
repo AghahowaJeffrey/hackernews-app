@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_apscheduler',
-    'backend'
+    'backend',
+    'rest_framework',
 ]
 
 # This scheduler config will:

@@ -9,6 +9,8 @@ django-apscheduler = "*"
 apscheduler = "*"
 requests = "*"
 httpx = {extras = ["http2"], version = "*"}
+djangorestframework = "*"
+django-filter = "*"
 
 [dev-packages]
 

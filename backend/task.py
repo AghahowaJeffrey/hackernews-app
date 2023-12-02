@@ -19,6 +19,8 @@ async def fetch_comment(session, story_data, comment_id):
                 'text': story_data.get('text', ''),
                 'time': datetime.fromtimestamp(story_data.get('time', 0)),
                 'type': story_data.get('type', 'story'),
+                'url': story_data.get('url'),
+                'kid': comment_data
             }
         )
 
@@ -48,12 +50,13 @@ async def fetch_story_and_comments(session, story_id):
                 'text': story_data.get('text', ''),
                 'time': datetime.fromtimestamp(story_data.get('time', 0)),
                 'type': story_data.get('type', 'story'),
+                'url': story_data.get('url', '')
             }
         )
 
         if 'kids' in story_data:
             comment_tasks = []
-            for comment_id in story_data['kids'][:5]:
+            for comment_id in story_data['kids'][:10]:
                 comment_tasks.append(fetch_comment(session, story_data, comment_id))
 
             await asyncio.gather(*comment_tasks)
@@ -68,7 +71,7 @@ async def fetch_top_stories_and_comments():
                 top_stories_ids = response.json()
 
                 story_tasks = []
-                for story_id in top_stories_ids[:100]:
+                for story_id in top_stories_ids[:10]:
                     story_tasks.append(fetch_story_and_comments(session, story_id))
 
                 await asyncio.gather(*story_tasks)
