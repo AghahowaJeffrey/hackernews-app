@@ -1,12 +1,3 @@
-import datetime as dt
-import requests
-from django.utils.timezone import make_aware
-from .models import Comment, Story
-
-
-
-
-
 
 import requests
 from datetime import datetime
