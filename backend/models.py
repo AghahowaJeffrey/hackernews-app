@@ -8,7 +8,7 @@ class Story(models.Model):
     score = models.IntegerField()
     text = models.TextField()
     type = models.CharField(max_length=20, default='story')
-    time = models.DateTimeField()
+    time = models.DateTimeField(editable=True, auto_now_add=True)
     url = models.URLField(max_length=200, null=True)
 
     def __str__(self):

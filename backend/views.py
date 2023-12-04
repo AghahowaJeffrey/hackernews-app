@@ -1,63 +1,24 @@
 
 from django.shortcuts import render
-from apscheduler.schedulers.background import BackgroundScheduler
-from backend.task import fetch_top_stories_and_comments
+from django.http import HttpResponse
 from .models import Story
-import asyncio
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from django.http import JsonResponse, HttpResponse
-from django.views import View
 from rest_framework import generics, status
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .serializers import StorySerializer
-from .task import sync_fetch_top_stories_and_comments
-from django.http import JsonResponse
-from django.views import View
-import asyncio
+from apscheduler.schedulers.background import BackgroundScheduler
+from backend.task import fetch_top_stories_and_comments
 
 
-async def fetch_stories_and_comments_async():
-    await fetch_top_stories_and_comments()
+def start(request):
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(fetch_top_stories_and_comments, "interval", minutes=1)
+    scheduler.start()
 
-class FetchStoriesCommentsView(View):
-    async def get(self, request):
-        # Call the asynchronous function within an async view
-        await fetch_top_stories_and_comments()
-        return JsonResponse({'message': 'Fetching stories and comments completed.'})
+    stories = Story.objects.all()
 
-# def task_status(request):
-#     scheduler = BackgroundScheduler()
-#     scheduler.add_job(fetch_stories_and_comments_async, 'interval', seconds=10)
-#     scheduler.start()
-
-#     stories = Story.objects.all()
-
-    # return HttpResponse(stories)
-
-
-
-
-
-# class FetchStoriesCommentsView(View):
-#     async def get(self, request):
-#         await fetch_stories_and_comments_async()
-#         return JsonResponse({'message': 'Fetching stories and comments completed.'})
-
-# async def schedule_background_task():
-#     while True:
-#         await asyncio.sleep(60)  # Wait for 60 seconds
-#         await fetch_stories_and_comments_async()
-
-# def start_background_task():
-#     asyncio.create_task(schedule_background_task())
-
-# def task_status(request):
-#     start_background_task()
-#     stories = Story.objects.all()
-#     return HttpResponse(stories)
-
+    return HttpResponse(stories)
 
 
 class CustomPageNumberPagination(PageNumberPagination):
@@ -66,7 +27,7 @@ class CustomPageNumberPagination(PageNumberPagination):
     max_page_size = 100
 
 class LatestStoriesView(generics.ListAPIView):
-    queryset = Story.objects.all().order_by('-time')[:10]  # Get latest 10 stories
+    queryset = Story.objects.all().order_by('-time')  # Get latest 10 stories
     serializer_class = StorySerializer
     pagination_class = CustomPageNumberPagination
 
@@ -102,26 +63,17 @@ class StoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StorySerializer
 
     def perform_destroy(self, instance):
-        if instance.created_in_api:
+        if instance.fetched == False:
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({"detail": "Cannot delete items from Hacker News"}, status=status.HTTP_403_FORBIDDEN)
 
     def perform_update(self, serializer):
-        if serializer.instance.created_in_api:
+        if serializer.instance.fetched == False:
             serializer.save()
             return Response(serializer.data)
         else:
             return Response({"detail": "Cannot update items from Hacker News"}, status=status.HTTP_403_FORBIDDEN)
 
 
- 
-
-
-
-
-# class FetchStoriesCommentsView(View):
-#     async def get(self, request):
-#         await fetch_top_stories_and_comments()
-#         return JsonResponse({'message': 'Fetching stories and comments completed.'})

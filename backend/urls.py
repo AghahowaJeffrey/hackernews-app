@@ -2,13 +2,12 @@
 from django.contrib import admin
 from django.urls import path, include
 from backend import views
-from .views import FetchStoriesCommentsView, LatestStoriesView, FilteredStoriesView, StorySearchView, StoryDetailView
+from .views import start, LatestStoriesView, FilteredStoriesView, StorySearchView, StoryDetailView
 
 
 urlpatterns = [
-    path('fetch-stories-comments/', FetchStoriesCommentsView.as_view(), name='fetch-stories-comments'),
+    path('', views.start),
     path('admin/', admin.site.urls),
-    # path('fetch-stories-comments/', views.task_status, name='fetch-stories-comments'),
     path('api-auth/', include('rest_framework.urls')),
     path('latest-stories/', LatestStoriesView.as_view(), name='latest-stories'),
     path('filtered-stories/', FilteredStoriesView.as_view(), name='filtered-stories'),
