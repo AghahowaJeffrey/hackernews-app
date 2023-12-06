@@ -5,7 +5,7 @@
 
 
 ### Description
-A django application that gets data from hackernews api and store to its database periodically. With a vue + typescript frontend to display the data & CSS for styling.
+A django application that gets data from hackernews api and store to its database periodically. Incluciding basic fetures peovided through the api endpoint. With a vue + typescript frontend to display the data & TailwindCSS for styling.
 
 
 # Features
@@ -19,6 +19,32 @@ A django application that gets data from hackernews api and store to its databas
  - Storing stories and comments to the database
 
 
+# Code Walkthrough
+## Backend
+#### **backend/task.py**
+**fetch_story(story_id):** Fetches individual story data from Hacker News API and updates the Django database with the story details.
+
+**fetch_top_stories_and_comments():** Gets each individual story id, invokes fetch_story() to process each story, and stores them in the database.
+backend/views.py
+
+**fetch_comment(story_data, comment_id):** Fetches the comments if kids are available in stories, Also stores the associated story as the parent parameter of the comment creating a **One -- many relationship**
+
+**start(request)**: Initiates a background scheduler that triggers the fetching of Hacker News stories.
+
+### Management/commands
+**task_runner.py:**
+This file helps run the scheduler task present in task.py at the beginning of the server automatically, with additional aid from -
++ __init__.py
++ apps.py
+  
+### API Endpoints:
+**LatestStoriesView:** Retrieves the latest stories from the database.
+
+**FilteredStoriesView:** Retrieves filtered stories based on categories.
+
+**StorySearchView:** Allows searching for stories using specific keywords.
+
+**StoryDetailView:** Retrieves, updates, or deletes individual stories.(it allows only the deleting and updating of personally created stories)
 
 
 ### Cloning the repository
@@ -70,7 +96,7 @@ cd frontend
 
 --> Installing all needed Dev Dependencies from package.json :
 ```bash
-pipenv install 
+npm install 
 ```
 
 #
@@ -80,12 +106,12 @@ pipenv install
 
 --> To run the App, we use :
 ```bash
-npm run start
+npm run dev
 
 
 ```
 
-> ⚠ Then, the development server may be started at http://127.0.0.1:8000/
+> ⚠ Then, the development server may be started at http://127.0.0.1:5173/
 
 ## Recommended IDE Setup
 

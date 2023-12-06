@@ -9,7 +9,7 @@ from .serializers import StorySerializer
 
 
 class CustomPageNumberPagination(PageNumberPagination):
-    page_size = 3
+    page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
 
@@ -28,9 +28,9 @@ class FilteredStoriesView(generics.ListAPIView):
         filter_param = self.request.query_params.get('filter', '').lower()
 
         if filter_param == 'ask':
-            return Story.objects.filter(title__icontains='Ask Hn') | Story.objects.filter(title__icontains='ask hn')
+            return Story.objects.filter(title__icontains='Ask HN') | Story.objects.filter(title__icontains='ask hn')
         elif filter_param == 'show':
-            return Story.objects.filter(title__icontains='Show Hn') | Story.objects.filter(title__icontains='show hn')
+            return Story.objects.filter(title__icontains='Show HN') | Story.objects.filter(title__icontains='show hn')
         elif filter_param == 'job':
             return Story.objects.filter(title__icontains='hiring')
 
