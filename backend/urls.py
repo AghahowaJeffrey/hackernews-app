@@ -1,12 +1,10 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from backend import views
-from .views import start, LatestStoriesView, FilteredStoriesView, StorySearchView, StoryDetailView
+from .views import LatestStoriesView, FilteredStoriesView, StorySearchView, StoryDetailView
 
 
 urlpatterns = [
-    path('', views.start),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('latest-stories/', LatestStoriesView.as_view(), name='latest-stories'),
