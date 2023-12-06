@@ -15,6 +15,7 @@ def fetch_comment(story_data, comment_id):
             story_id=story_data['id'],
             defaults={
                 'title': story_data.get('title', ''),
+                'fetched': True,
                 'by': story_data.get('by', ''),
                 'descendants': story_data.get('descendants', 0),
                 'score': story_data.get('score', 0),
@@ -46,6 +47,7 @@ def fetch_story(story_id):
             story_id=story_data['id'],
             defaults={
                 'title': story_data.get('title', ''),
+                'fetched': True,
                 'by': story_data.get('by', ''),
                 'descendants': story_data.get('descendants', 0),
                 'score': story_data.get('score', 0),
@@ -67,12 +69,15 @@ def fetch_top_stories_and_comments():
     if response.status_code == 200:
         top_stories_ids = response.json()
 
-        for story_id in list(reversed(top_stories_ids[:10])):
+        for story_id in list(reversed(top_stories_ids[:100])):
             fetch_story(story_id)
 
+def start_task():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(fetch_top_stories_and_comments, "date", run_date=datetime.now() + timedelta(minutes=1), max_instances=1)
+    scheduler.start()
 
-
-def start():
+def start_interval():
     scheduler = BackgroundScheduler()
     scheduler.add_job(fetch_top_stories_and_comments, "interval", minutes=5)
     scheduler.start()

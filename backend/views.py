@@ -18,6 +18,7 @@ class LatestStoriesView(generics.ListAPIView):
     serializer_class = StorySerializer
     pagination_class = CustomPageNumberPagination
 
+
 class FilteredStoriesView(generics.ListAPIView):
     serializer_class = StorySerializer
     filter_backends = [SearchFilter]

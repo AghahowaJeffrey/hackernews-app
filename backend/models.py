@@ -2,6 +2,7 @@ from django.db import models
 
 class Story(models.Model):
     story_id = models.IntegerField(unique=True)
+    fetched = models.BooleanField(default=True)
     title = models.CharField(max_length=255)
     by = models.CharField(max_length=255)
     descendants = models.IntegerField()
