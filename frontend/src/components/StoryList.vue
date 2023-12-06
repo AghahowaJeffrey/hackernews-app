@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <!-- <div>
       <h2>Latest Stories</h2>
       <ul>
         <li v-for="story in stories" :key="story.id">
@@ -8,17 +8,22 @@
           <ul>
             <li v-for="comment in story.comments" :key="comment.id">
               <p>{{ comment.text }}</p>
-              <!-- Display other comment details as needed -->
-            </li>
+              Display other comment details as needed
+             </li>
           </ul>
           <hr>
         </li>
       </ul>
-    </div>
+    </div> -->
   </template>
   
   <script lang="ts">
-  
+  import { defineComponent } from 'vue';
+
+  export default  defineComponent({
+  components: {
+  }
+});
   </script>
   
   <style>

@@ -1,24 +1,11 @@
 
 from django.shortcuts import render
-from django.http import HttpResponse
 from .models import Story
 from rest_framework import generics, status
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .serializers import StorySerializer
-from apscheduler.schedulers.background import BackgroundScheduler
-from backend.task import fetch_top_stories_and_comments
-
-
-def start(request):
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(fetch_top_stories_and_comments, "interval", minutes=1)
-    scheduler.start()
-
-    stories = Story.objects.all()
-
-    return HttpResponse(stories)
 
 
 class CustomPageNumberPagination(PageNumberPagination):
@@ -55,8 +42,6 @@ class StorySearchView(generics.ListAPIView):
     filter_backends = [SearchFilter]
     pagination_class = CustomPageNumberPagination
     search_fields = ['title', 'text']  # Fields to search through
-
-
 
 class StoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Story.objects.all()
