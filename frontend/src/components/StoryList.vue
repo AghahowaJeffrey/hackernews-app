@@ -21,8 +21,12 @@
   import { defineComponent } from 'vue';
 
   export default  defineComponent({
+    name: 'StoryList',
   components: {
-  }
+  },
+  setup() {
+    return {};
+  },
 });
   </script>
   

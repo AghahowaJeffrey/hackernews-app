@@ -46,6 +46,58 @@ This file helps run the scheduler task present in task.py at the beginning of th
 
 **StoryDetailView:** Retrieves, updates, or deletes individual stories.(it allows only the deleting and updating of personally created stories)
 
+### Usage
+**StoryDetailView:** This also provides enpoint in the URL pattern stories/<int:pk>/ corresponding to this view and handles GET, POST, PUT, and DELETE HTTP requests for a specific story based on its primary key (pk).
+Retrieving a Story (GET request):
+Send a GET request to retrieve a specific story by its ID:
+
+http
+Copy code
+GET /stories/<story_id>/
+This will return the details of the story with the specified ID.
+
+Creating a Story (POST request):
+Send a POST request with the necessary data to create a new story:
+
+http
+Copy code
+POST /stories/
+Content-Type: application/json
+
+{
+  "title": "New Story Title",
+  "by": "Author",
+  "descendants": 0,
+  "score": 0,
+  "text": "Story content",
+  "time": "2023-12-31T00:00:00Z",
+  "type": "story",
+  "created_in_api": true
+}
+This will create a new story with the provided details.
+
+Updating a Story (PUT request):
+Send a PUT request with the updated data to modify an existing story:
+
+http
+Copy code
+PUT /stories/<story_id>/
+Content-Type: application/json
+
+{
+  "title": "Updated Story Title",
+  "by": "New Author",
+  "text": "Updated story content"
+  ...
+}
+This will update the details of the story with the specified ID.
+
+Deleting a Story (DELETE request):
+Send a DELETE request to remove a story:
+
+http
+Copy code
+DELETE /stories/<story_id>/
 
 ### Cloning the repository
 
@@ -123,3 +175,4 @@ npm run dev
 
 #
 ## Todo
+* make it stop running immediately all the task for that job has been recieved

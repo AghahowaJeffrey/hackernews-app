@@ -9,9 +9,13 @@ import { defineComponent } from 'vue';
 import StoryList from './components/StoryList.vue';
 
 export default  defineComponent({
+  name: 'App',
   components: {
-    StoryList
-  }
+    
+  },
+  setup() {
+    return {};
+  },
 });
 </script>
 

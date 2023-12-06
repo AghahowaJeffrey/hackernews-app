@@ -7,10 +7,10 @@ from .views import LatestStoriesView, FilteredStoriesView, StorySearchView, Stor
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('latest-stories/', LatestStoriesView.as_view(), name='latest-stories'),
-    path('filtered-stories/', FilteredStoriesView.as_view(), name='filtered-stories'),
-    path('story-search/', StorySearchView.as_view(), name='story-search'),
-    path('stories/<int:pk>/', StoryDetailView.as_view(), name='story-detail'),
+    path('latest-stories/', LatestStoriesView.as_view(), name='latest-stories'), #/latest-stories/
+    path('filtered-stories/', FilteredStoriesView.as_view(), name='filtered-stories'), #/filtered-stories/?filter=
+    path('story-search/', StorySearchView.as_view(), name='story-search'), #/story-search/?search=
+    path('stories/<int:pk>/', StoryDetailView.as_view(), name='story-detail'), #/stories/12/
     # Other URL patterns...#
 ]
 
