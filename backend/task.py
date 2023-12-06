@@ -74,7 +74,7 @@ def fetch_top_stories_and_comments():
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(fetch_top_stories_and_comments, "interval", minutes=1)
+    scheduler.add_job(fetch_top_stories_and_comments, "interval", minutes=5)
     scheduler.start()
 
 
