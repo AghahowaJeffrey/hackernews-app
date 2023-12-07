@@ -11,6 +11,7 @@ requests = "*"
 httpx = {extras = ["http2"], version = "*"}
 djangorestframework = "*"
 django-filter = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

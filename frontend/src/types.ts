@@ -21,3 +21,11 @@ export interface Comment {
     time: string;
     url: string;
   }
+
+  export interface Data {
+    count: number;
+    next: string;
+    previous: {};
+    results: [Story]
+
+  }
