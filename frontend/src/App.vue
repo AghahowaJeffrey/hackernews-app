@@ -43,17 +43,6 @@ export default defineComponent({
       }
     };
 
-
-    // Function to view a story in detail
-    const viewStory = (story: Story) => {
-      selectedStory.value = story;
-    };
-
-    // Function to go back from story detail view
-    const goBack = () => {
-      selectedStory.value = null;
-    };
-
     const newsClicked = () => {
       URL.value = 'http://127.0.0.1:8000/'
       fetchStories()
@@ -85,8 +74,6 @@ export default defineComponent({
     return {
       stories,
       selectedStory,
-      viewStory,
-      goBack,
       newsClicked,
       newestClicked,
       askClicked,
@@ -126,10 +113,10 @@ export default defineComponent({
         </div> 
       </header>
       <PageNavigation apiUrl="{{ URL }}" @fetchStories="fetchStories"/>
-      <StoryList :stories="stories" @storyClicked="viewStory" />
-      <StoryDetail v-if="selectedStory" :story="selectedStory" @back="goBack" />
+      <StoryList :stories="stories"  />
     </div>
   </div>
+  <router-view></router-view>
 </template>
 
 <style scoped>

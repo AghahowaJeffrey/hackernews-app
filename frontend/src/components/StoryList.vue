@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { Story } from '../types';
-import { timeAgo } from '../utils'
+import { timeAgo } from '../utils';
+// import { useRouter } from 'vue-router';
 
 
 export default defineComponent({
@@ -11,15 +12,9 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['storyClicked'],
-  setup(props, { emit }) {
-    const handleStoryClick = (story: Story) => {
-      // Emit an event when a story is clicked
-      emit('storyClicked', story);
-    };
+  setup(props) {
 
     return {
-      handleStoryClick,
       timeAgo
     };
   },
@@ -30,14 +25,14 @@ export default defineComponent({
   <div class="container">
     <div class="align">
       <div class="story-box">
-        <div class="stories" v-for="story in stories" :key="story.id" @click="handleStoryClick(story)">
+        <div class="stories" v-for="story in stories" :key="story.id">
+          <p class="score">{{ story.score }}</p>
           <router-link :to="{name: 'DetailPage', params: {id: story.id}}">
-            <p class="score">{{ story.score }}</p>
-            <div class="story-info">
+          <div class="story-info">
               <h1 class="title">{{ story.title }}</h1>
               <p >by <span class="author">{{ story.by }} </span><span class="time">{{ timeAgo(story.time) }}</span> | 
-              <span class="comment">{{ story.descendants }} comments</span></p>
-            </div>
+                <span class="comment">{{ story.descendants }} comments</span></p>
+          </div>
           </router-link>
         </div>
       </div>
@@ -46,6 +41,10 @@ export default defineComponent({
 </template>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: inherit;
+}
 .container {
   background: #f8f5f5;
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import axios from 'axios';
   import { Data , Story } from '../types'
   
@@ -71,17 +71,29 @@
   </script>
 
 <template>
-    <div>
-      <!-- Pagination buttons -->
-      <div>
-        <button @click="prevPage" :disabled="!previous">Previous</button>
-        <span>{{ currentPage }} / {{ totalPages }}</span>
-        <button @click="nextPage" :disabled="!next">Next</button>
+    <div class="wrapper">
+      <div class="align">
+        <div class="search-box">
+          <button @click="prevPage" :disabled="!previous">Previous</button>
+          <span>{{ currentPage }} / {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="!next">Next</button>
+        </div>
       </div>
     </div>
   </template>
   
   <style scoped>
-  /* Styles for pagination buttons */
-  /* ... */
+.wrapper {
+  background: #f8f5f5;
+}
+.align {
+  padding-top: 10px;
+  margin: auto;
+  max-width: 740px;
+  background-color: #fff;
+}
+.search-box {
+  width: fit-content;
+  margin: auto;
+}
   </style>
