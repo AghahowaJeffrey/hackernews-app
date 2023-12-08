@@ -2,6 +2,7 @@
 import { defineComponent, ref } from 'vue';
 import StoryList from './components/StoryList.vue';
 import StoryDetail from './components/StoryDetails.vue';
+import PageNavigation from './components/PageNavigation.vue'
 import { Story, Data } from './types'; 
 import axios from 'axios'
 
@@ -9,6 +10,7 @@ export default defineComponent({
   components: {
     StoryList,
     StoryDetail,
+    PageNavigation,
   },
   setup() {
     const stories = ref<Story[]>([]); // Fetch stories from API and store in this variable
@@ -31,7 +33,7 @@ export default defineComponent({
     // Function to fetch stories based on the search text
     const searchStories = async () => {
       try {
-        const response = await axios.get<Story[]>(
+        const response = await axios.get<Data>(
           `http://127.0.0.1:8000/story-search/?search=${searchText.value}`
         );
         const data: Data = response.data;
@@ -73,6 +75,11 @@ export default defineComponent({
       fetchStories()
     }
 
+    // // Watch changes in URL ref and fetch stories when it changes
+    // watch(() => URL.value, (newURL) => {
+    //   fetchStories(newURL);
+    // });
+
     fetchStories(); // Fetch stories when component is mounted
 
     return {
@@ -86,7 +93,9 @@ export default defineComponent({
       showClicked,
       jobClicked,
       searchText,
-      searchStories
+      searchStories,
+      fetchStories,
+      URL,
     };
   },
 });
@@ -116,6 +125,7 @@ export default defineComponent({
           </div>
         </div> 
       </header>
+      <PageNavigation apiUrl="{{ URL }}" @fetchStories="fetchStories"/>
       <StoryList :stories="stories" @storyClicked="viewStory" />
       <StoryDetail v-if="selectedStory" :story="selectedStory" @back="goBack" />
     </div>

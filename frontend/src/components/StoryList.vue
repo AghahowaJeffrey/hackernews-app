@@ -31,12 +31,14 @@ export default defineComponent({
     <div class="align">
       <div class="story-box">
         <div class="stories" v-for="story in stories" :key="story.id" @click="handleStoryClick(story)">
-          <p class="score">{{ story.score }}</p>
-          <div class="story-info">
-            <h1 class="title">{{ story.title }}</h1>
-            <p >by <span class="author">{{ story.by }} </span><span class="time">{{ timeAgo(story.time) }}</span> | 
-            <span class="comment">{{ story.descendants }} comment</span></p>
-          </div>
+          <router-link :to="{name: 'DetailPage', params: {id: story.id}}">
+            <p class="score">{{ story.score }}</p>
+            <div class="story-info">
+              <h1 class="title">{{ story.title }}</h1>
+              <p >by <span class="author">{{ story.by }} </span><span class="time">{{ timeAgo(story.time) }}</span> | 
+              <span class="comment">{{ story.descendants }} comments</span></p>
+            </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -45,7 +47,7 @@ export default defineComponent({
 
 <style scoped>
 .container {
-  background: #d5d3d3;
+  background: #f8f5f5;
 }
 .align {
   background: #ffffff;
@@ -78,6 +80,16 @@ export default defineComponent({
   margin-bottom: 8px;
 }
 .author {
-
+  text-decoration: underline;
+  margin-right: 10px;
+}
+.author:hover {
+  color: #00dc82
+}
+.comment {
+  text-decoration: underline;
+}
+.comment:hover {
+  color: #00dc82;
 }
 </style>

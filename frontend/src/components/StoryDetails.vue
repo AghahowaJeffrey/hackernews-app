@@ -20,10 +20,9 @@
         required: true,
       },
     },
-    emits: ['back'],
-    setup(props, { emit }) {
+    setup(props) {
       const goBack = () => {
-        emit('back');
+        this.$router.back();
       };
   
       const deleteStory = () => {

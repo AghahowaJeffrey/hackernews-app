@@ -1,11 +1,21 @@
-export function timeAgo (time: number | Date) {
-    const between = Date.now() / 1000 - Number(time)
-    if (between < 3600) { return pluralize(~~(between / 60), ' minute') } else if (between < 86400) { return pluralize(~~(between / 3600), ' hour') } else { return pluralize(~~(between / 86400), ' day') }
-  }
+export function timeAgo(utcTime: string) {
+  const timestampInSeconds = Date.parse(utcTime) / 1000;
+  const currentTimeInSeconds = Date.now() / 1000;
+  const timeDifference = Math.abs(currentTimeInSeconds - timestampInSeconds);
 
-  export function pluralize (time: number, label:string) {
-    if (time === 1) { return time + label }
-  
-    return `${time + label}s`
+  const minutes = Math.floor(timeDifference / 60);
+  const hours = Math.floor(timeDifference / 3600);
+  const days = Math.floor(timeDifference / 86400);
+
+  if (minutes < 60) {
+    return `${pluralize(minutes, 'minute')} ago`;
+  } else if (hours < 24) {
+    return `${pluralize(hours, 'hour')} ago`;
+  } else {
+    return `${pluralize(days, 'day')} ago`;
   }
-  
+}
+
+function pluralize(time: number, label: string) {
+  return time === 1 ? `${time} ${label}` : `${time} ${label}s`;
+}
