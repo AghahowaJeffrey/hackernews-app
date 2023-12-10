@@ -12,17 +12,22 @@ export default defineComponent({
     StoryDetail,
     PageNavigation,
   },
-  setup() {
+  setup(emits) {
     const stories = ref<Story[]>([]); // Fetch stories from API and store in this variable
     const selectedStory = ref<Story | null>(null);
     const URL = ref<string>('http://127.0.0.1:8000/latest-stories/');
     const searchText = ref<string>('');
 
 
+    const handleFetch = (url: string) => {
+      fetchStories(url)
+
+    }
+
     // Function to fetch stories
-    const fetchStories = async () => {
+    const fetchStories = async (url: string = URL.value) => {
       try {
-        const response = await axios.get<Story[]>(URL.value);
+        const response = await axios.get<Data>(url);
         const data: Data = response.data;
         stories.value = data.results
       } catch (error) {
@@ -44,7 +49,7 @@ export default defineComponent({
     };
 
     const newsClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/'
+      URL.value = 'http://127.0.0.1:8000/top-stories/'
       fetchStories()
     }
     const newestClicked = () => {
@@ -64,10 +69,6 @@ export default defineComponent({
       fetchStories()
     }
 
-    // // Watch changes in URL ref and fetch stories when it changes
-    // watch(() => URL.value, (newURL) => {
-    //   fetchStories(newURL);
-    // });
 
     fetchStories(); // Fetch stories when component is mounted
 
@@ -81,6 +82,7 @@ export default defineComponent({
       jobClicked,
       searchText,
       searchStories,
+      handleFetch,
       fetchStories,
       URL,
     };
@@ -102,6 +104,7 @@ export default defineComponent({
                 <li @click="askClicked">Ask</li>
                 <li @click="showClicked">Show</li>
                 <li @click="jobClicked">Job</li>
+                <li>Post</li>
               </ul>
             </nav>
             
@@ -112,11 +115,11 @@ export default defineComponent({
           </div>
         </div> 
       </header>
-      <PageNavigation apiUrl="{{ URL }}" @fetchStories="fetchStories"/>
+      <PageNavigation :apiUrl="URL" @fetchArgument="handleFetch"/>
       <StoryList :stories="stories"  />
     </div>
   </div>
-  <router-view></router-view>
+  <!-- <router-view></router-view> -->
 </template>
 
 <style scoped>

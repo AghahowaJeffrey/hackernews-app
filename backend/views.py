@@ -14,7 +14,12 @@ class CustomPageNumberPagination(PageNumberPagination):
     max_page_size = 100
 
 class LatestStoriesView(generics.ListAPIView):
-    queryset = Story.objects.all().order_by('-time')  # Get latest 10 stories
+    queryset = Story.objects.all().order_by('-time')  # Get latest stories
+    serializer_class = StorySerializer
+    pagination_class = CustomPageNumberPagination
+    
+class TopStoriesView(generics.ListAPIView):
+    queryset = Story.objects.all().order_by('score')  # Get top stories
     serializer_class = StorySerializer
     pagination_class = CustomPageNumberPagination
 
