@@ -49,7 +49,7 @@ export default defineComponent({
     };
 
     const newsClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/top-stories/'
+      URL.value = 'http://127.0.0.1:8000/filter-by-score/'
       fetchStories()
     }
     const newestClicked = () => {
