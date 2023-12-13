@@ -13,7 +13,7 @@
   import { defineComponent, ref , onMounted } from 'vue';
   import { Data, Story } from '../types';
   import { useRouter } from 'vue-router';
-  import axios from 'axios';
+  // import axios from 'axios';
   
   export default defineComponent({
     setup() {

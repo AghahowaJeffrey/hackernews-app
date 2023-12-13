@@ -1,75 +1,63 @@
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import axios from 'axios';
-  import { Data , Story } from '../types'
+  import { defineComponent} from 'vue';
+  import { store } from '../store'
+
   
   export default defineComponent({
     props: {
-      apiUrl: {
-        type: String,
+      totalPage: {
+        type: Number,
         required: true,
       },
     },
-    emits : ['fetchArgument'],
-    setup(props, {emit}) {
-      // const apiUrl = ref('http://127.0.0.1:8000/latest-stories/')
-      const currentPage = ref(0);
-      const totalPages = ref();
-      const next = ref<string>();
-      const current = ref<string>(props.apiUrl);
-      const previous = ref<string | null>();
-      const results = ref<Story[]>(); 
+    setup(props) {
 
-      const triggeredFetch = (url: string) => {
-        emit('fetchArgument', url)
-      }
-  
-      // Function to fetch data for a specific page
-      const fetchStories = async () => {
-        try {
-          const response = await axios.get<Data>(current.value)
-          const data = response.data;
-  
-          totalPages.value = data.count;
-          next.value = data.next;
-          previous.value = data.previous;
-
-          triggeredFetch(data.next)
-
-        } catch (error) {
-          console.error('Error fetching stories:', error);
-        }
-      };
-  
       // Function to navigate to the next page
       const nextPage = () => {
-        if (next.value != null) {
-          currentPage.value++;
-          current.value = next.value;
-          fetchStories();
+        if (store.currentPage != props.totalPage) {
+          store.currentPage++;
         }
       };
   
       // Function to navigate to the previous page
       const prevPage = () => {
-        if (previous.value != null) {
-          currentPage.value--;
-          current.value = previous.value;
-          fetchStories();
-
+        if (store.currentPage != 0) {
+          store.currentPage--;
         }
       };
 
-      fetchStories()
-  
+      const checkNextPage = () => {
+        if (store.currentPage == props.totalPage) {
+          return true
+        } else {
+          return false
+        }
+      }
+
+      const checkPrevPage = () => {
+        if (store.currentPage == 1) {
+          return false
+        } else {
+          return true
+        }
+      }
+
+      const totalPageRounder  = () => {
+        if (props.totalPage <= 10) {
+          return 1
+        } else {
+          return Math.round(props.totalPage / 10)
+        }
+      }
+      console.log(props.totalPage)
+
       return {
-        currentPage,
-        totalPages,
-        next,
-        previous,
-        results,
+        store,
+        totalPageRounder,
         nextPage,
         prevPage,
+        checkNextPage,
+        checkPrevPage,
         
       };
     },
@@ -80,9 +68,9 @@
     <div class="wrapper">
       <div class="align">
         <div class="search-box">
-          <button @click="prevPage" :disabled="!currentPage">Previous</button>
-          <span>{{ currentPage }} / {{ totalPages }}</span>
-          <button @click="nextPage" :disabled="!next">Next</button>
+          <button @click="prevPage" :disabled="checkPrevPage">Previous</button>
+          <span>{{ store.currentPage }} / {{ totalPageRounder() }}</span>
+          <button @click="nextPage" :disabled="!checkNextPage">Next</button>
         </div>
       </div>
     </div>

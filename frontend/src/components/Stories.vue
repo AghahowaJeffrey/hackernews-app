@@ -3,8 +3,8 @@ import { defineComponent, ref, watch } from 'vue';
 import StoryList from './components/StoryList.vue';
 import StoryDetail from './components/StoryDetails.vue';
 import PageNavigation from './components/PageNavigation.vue'
-import { Story, Data } from './types'; 
-import { store } from './store'
+import { Story, Data } from '../types'; 
+import { store } from '../store'
 import axios from 'axios'
 
 export default defineComponent({
