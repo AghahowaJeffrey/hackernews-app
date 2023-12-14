@@ -1,17 +1,10 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import StoryList from './components/StoryList.vue';
-import StoryDetail from './components/StoryDetails.vue';
-import PageNavigation from './components/PageNavigation.vue'
 import { Story, Data } from '../types'; 
-import { store } from '../store'
 import axios from 'axios'
 
 export default defineComponent({
   components: {
-    StoryList,
-    StoryDetail,
-    PageNavigation,
   },
   setup() {
     const stories = ref<Story[]>([]); // Fetch stories from API and store in this variable
@@ -21,7 +14,7 @@ export default defineComponent({
 
 
     // Function to fetch stories
-    const fetchStories = async (filter: string = '') => {
+    const fetchStories = async () => {
       try {
         const response = await axios.get<Data>(`${URL.value}?page=${store.currentPage}${filter}`);
         const data: Data = response.data;
@@ -99,89 +92,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="main-container">
-    <div>
-      <header>
-        <div class="align">
-          <div class="nav-container">
-            <h1 class="logo">HACKERNEWS</h1>
-            <nav class="navigation">
-              <ul>
-                <li @click="newsClicked">News</li>
-                <li @click="newestClicked">Newest</li>
-                <li @click="askClicked">Ask</li>
-                <li @click="showClicked">Show</li>
-                <li @click="jobClicked">Job</li>
-                <li>Post</li>
-              </ul>
-            </nav>
-            
-          </div>
-          <div class="searchbox">
-            <input v-model="searchText">
-            <button @click="searchStories">Search</button>
-          </div>
-        </div> 
-      </header>
-      <PageNavigation :totalPage="totalPage" />
-      <StoryList :stories="stories"  />
-    </div>
-  </div>
-  <!-- <router-view></router-view> -->
+  <h1>Detail Page</h1>
 </template>
 
 <style scoped>
-* { 
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-header {
-  background: #211f1f;
-  color: #ffffff;
-  padding-block-start: 10px;
-  padding-block-end: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 100%;
-  margin: auto;
-}
-.align {
-  margin: auto;
-  max-width: 740px;
-}
-.nav-container {
-  display: flex;
-  align-items: center;
-}
-.logo {
-  font-size: 15px;
-  color: #00dc82
-}
-.navigation ul{
-  list-style: none;
-  display: flex;
-}
-.navigation li {
-  padding-right: 20px;
-  font-weight: normal;
-  font-size: 15px;
-  cursor: pointer
-}
-.navigation li:hover {
-  color: #00dc82
-}
-.searchbox input{
-  outline: none;
-  width: 200px;
-  height: 30px;
-  border: 0
-}
-.searchbox button {
-  height: 30px;
-  color: #ffffff;
-  background-color: #03b269;
-  border: 0;
-  
-}
-
 
 </style>

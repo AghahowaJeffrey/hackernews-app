@@ -11,7 +11,7 @@
   
   <script lang="ts">
   import { defineComponent, ref , onMounted } from 'vue';
-  import { Data, Story } from '../types';
+  // import { Data, Story } from '../types';
   import { useRouter } from 'vue-router';
   // import axios from 'axios';
   
@@ -19,7 +19,7 @@
     setup() {
       const router = useRouter();
       const storyId = ref();
-      const story = ref<Story[]>([]);
+      // const story = ref<Story[]>([]);
 
       onMounted(() => {
       // Access the ID from the route parameters

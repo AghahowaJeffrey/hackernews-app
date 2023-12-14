@@ -1,19 +1,25 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 // Import your components for main and detailed pages
-import StoryDetails from '../App.vue'
-import StoryList from '../components/StoryList.vue';
+import Home from '../views/Home.vue'
+import Post from '../views/Post.vue';
+import Detail from '../views/Detail.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'StoryPage',
-    component: StoryList,
+    name: 'HomePage',
+    component: Home,
+  },
+  {
+    path: '/post',
+    name: 'CreatePost',
+    component: Post,
   },
   {
     path: '/story/:id',
     name: 'DetailPage',
-    component: StoryDetails,
+    component: Detail,
     props: true, // Pass route params as props to the component
   },
 ];
