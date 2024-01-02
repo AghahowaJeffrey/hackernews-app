@@ -35,7 +35,7 @@
       }
 
       const checkPrevPage = () => {
-        if (store.currentPage == 1) {
+        if (store.currentPage > 1) {
           return false
         } else {
           return true
@@ -68,9 +68,9 @@
     <div class="wrapper">
       <div class="align">
         <div class="search-box">
-          <button @click="prevPage" :disabled="checkPrevPage">Previous</button>
+          <button @click="prevPage" :disabled="checkPrevPage()">Previous</button>
           <span>{{ store.currentPage }} / {{ totalPageRounder() }}</span>
-          <button @click="nextPage" :disabled="!checkNextPage">Next</button>
+          <button @click="nextPage" :disabled="checkNextPage()">Next</button>
         </div>
       </div>
     </div>

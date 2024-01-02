@@ -2,7 +2,6 @@
 import { defineComponent, PropType } from 'vue';
 import { Story } from '../types';
 import { timeAgo } from '../utils';
-// import { useRouter } from 'vue-router';
 
 
 export default defineComponent({
@@ -13,9 +12,10 @@ export default defineComponent({
     },
   },
   setup() {
+    
 
     return {
-      timeAgo
+      timeAgo,
     };
   },
 });
@@ -27,7 +27,7 @@ export default defineComponent({
       <div class="story-box">
         <div class="stories" v-for="story in stories" :key="story.id">
           <p class="score">{{ story.score }}</p>
-          <router-link :to="{name: 'DetailPage', params: {id: story.id}}">
+          <router-link :to="{name: 'DetailPage', params: {id: story.id}}" >
           <div class="story-info">
               <h1 class="title">{{ story.title }}</h1>
               <p >by <span class="author">{{ story.by }} </span><span class="time">{{ timeAgo(story.time) }}</span> | 

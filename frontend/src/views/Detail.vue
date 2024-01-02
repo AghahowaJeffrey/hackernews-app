@@ -1,100 +1,78 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
-import { Story, Data } from '../types'; 
-import axios from 'axios'
-
-export default defineComponent({
-  components: {
-  },
-  setup() {
-    const stories = ref<Story[]>([]); // Fetch stories from API and store in this variable
-    const URL = ref<string>('http://127.0.0.1:8000/latest-stories/');
-    const searchText = ref<string>('');
-    const totalPage = ref(100);
+  import { defineComponent, ref } from 'vue';
+  import { useRoute } from 'vue-router'
+  import { Story } from '../types'; 
+  import axios from 'axios';
+  import { timeAgo } from '../utils';
 
 
-    // Function to fetch stories
-    const fetchStories = async () => {
-      try {
-        const response = await axios.get<Data>(`${URL.value}?page=${store.currentPage}${filter}`);
-        const data: Data = response.data;
-        stories.value = data.results
-        totalPage.value = data.count
-      } catch (error) {
-        console.error('Error fetching stories:', error);
+  export default defineComponent({
+    setup() {
+      const route = useRoute()
+      const storyData = ref<Story | undefined>()
+
+      const fetchUser = async (ID: String | String[]) => {
+        try {
+          const response = await axios.get<Story>(`http://127.0.0.1:8000/stories/${ID}`);
+          console.log(`http://127.0.0.1:8000/stories/${ID}`)
+          const data: Story = response.data;
+          console.log(data)
+          if (data) {
+            storyData.value = data
+          }
+          
+        } catch (error) {
+          console.error('Error fetching stories:', error);
+        }
       }
-    };
 
-    // Function to fetch stories based on the search text
-    const searchStories = async () => {
-      try {
-        const response = await axios.get<Data>(
-          `http://127.0.0.1:8000/story-search/?search=${searchText.value}&?page=${store.currentPage}`
-        );
-        const data: Data = response.data;
-        stories.value = data.results;
-      } catch (error) {
-        console.error('Error searching stories:', error);
-      }
-    };
-
-    const newsClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/filter-by-score/'
-      store['currentPage'] = 1
-      fetchStories()
-    }
-    const newestClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/latest-stories/'
-      store['currentPage'] = 1
-      fetchStories()
-    }
-    const askClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/filtered-stories/'
-      store['currentPage'] = 1
-      fetchStories('&filter=ask') 
-    }
-    const showClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/filtered-stories/'
-      store['currentPage'] = 1
-      fetchStories('&filter=show')
-    }
-    const jobClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/filtered-stories/'
-      store['currentPage'] = 1
-      fetchStories('&filter=job')
-    }
-
-
-    
-    fetchStories(); // Fetch stories when component is mounted
-    watch(
-      () => store.currentPage,
-      () => {
-        fetchStories();
-      }
-    );
-
-    return {
-      stories,
-      newsClicked,
-      newestClicked,
-      askClicked,
-      showClicked,
-      jobClicked,
-      searchText,
-      searchStories,
-      totalPage,
-      fetchStories,
-      URL,
-    };
-  },
-});
+      // fetch the user information when params change
+      
+      fetchUser(route.params.id)
+      console.log(route.params.id)
+      console.log(storyData.value)
+      return {
+        storyData,
+        timeAgo
+      };
+    },
+  });
 </script>
 
 <template>
-  <h1>Detail Page</h1>
+  <div class="main-container">
+    <div class="align">
+      <h1>{{storyData?.title}}</h1>
+      <h2>{{timeAgo(storyData?.time)}}</h2>
+      <p>{{storyData?.text}}</p>
+      <p>{{ storyData?.descendants }} Comments</p>
+        <ul>
+          <li class="comment" v-for="comment in storyData?.comments">
+            {{ comment.text }}
+          </li>
+        </ul>
+    </div>  
+  </div>
+
+
 </template>
 
 <style scoped>
 
+.main-container {
+  background-color: #f8f5f5;
+}
+
+.align {
+  margin: auto;
+  padding: 10px;
+  max-width: 740px;
+  background-color: #ffffff;
+}
+
+.comment {
+  margin-left: 50px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid green;
+}
 </style>

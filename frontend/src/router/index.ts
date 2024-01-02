@@ -20,7 +20,8 @@ const routes: Array<RouteRecordRaw> = [
     path: '/story/:id',
     name: 'DetailPage',
     component: Detail,
-    props: true, // Pass route params as props to the component
+    // props: true,
+
   },
 ];
 
