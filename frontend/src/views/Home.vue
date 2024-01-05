@@ -112,7 +112,7 @@ export default defineComponent({
                 <li @click="askClicked">Ask</li>
                 <li @click="showClicked">Show</li>
                 <li @click="jobClicked">Job</li>
-                <router-link :to="{name: 'CreatePost'}"><li>Post</li></router-link>
+                <router-link :to="{name: 'CreatePost'}"><li>Submit</li></router-link>
               </ul>
             </nav>
             
