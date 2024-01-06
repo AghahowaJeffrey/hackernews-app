@@ -1,5 +1,5 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Story
 from rest_framework import generics, status
 from rest_framework.filters import SearchFilter
@@ -61,11 +61,11 @@ class StoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StorySerializer
 
     def perform_destroy(self, instance):
-        if instance.fetched == False:
+        if instance.fetched:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        else:
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response({"detail": "Cannot delete items from Hacker News"}, status=status.HTTP_403_FORBIDDEN)
 
     def perform_update(self, serializer):
         if serializer.instance.fetched == False:

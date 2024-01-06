@@ -10,6 +10,7 @@ export interface Comment {
   
   export interface Story {
     id: number;
+    fetched: boolean;
     comments: Comment[];
     story_id: number;
     title: string;
