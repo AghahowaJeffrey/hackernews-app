@@ -46,7 +46,7 @@ export default defineComponent({
     };
 
     const newsClicked = () => {
-      URL.value = 'http://127.0.0.1:8000/filter-by-score/'
+      URL.value = 'http://127.0.0.1:8000/top-stories/'
       store['currentPage'] = 1
       fetchStories()
     }

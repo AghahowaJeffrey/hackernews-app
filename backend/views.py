@@ -13,12 +13,6 @@ class CustomPageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 100
 
-class FilterByScoreView(generics.ListAPIView):
-    serializer_class = StorySerializer
-    pagination_class = CustomPageNumberPagination
-
-    def get_queryset(self):
-        return Story.objects.all().order_by('-score')
 
 class LatestStoriesView(generics.ListAPIView):
     queryset = Story.objects.all().order_by('-time')  # Get latest stories
@@ -26,7 +20,7 @@ class LatestStoriesView(generics.ListAPIView):
     pagination_class = CustomPageNumberPagination
     
 class TopStoriesView(generics.ListAPIView):
-    queryset = Story.objects.all().order_by('score')  # Get top stories
+    queryset = Story.objects.all().order_by('-score')  # Get top stories
     serializer_class = StorySerializer
     pagination_class = CustomPageNumberPagination
 
