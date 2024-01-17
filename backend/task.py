@@ -12,7 +12,6 @@ def fetch_comment(story_data, comment_id):
     if response.status_code == 200:
         comment_data = response.json()
         parent_story_instance, _ = Story.objects.get_or_create(
-            story_id=story_data['id'],
             defaults={
                 'title': story_data.get('title', ''),
                 'fetched': True,
@@ -44,7 +43,6 @@ def fetch_story(story_id):
     if response.status_code == 200:
         story_data = response.json()
         Story.objects.update_or_create(
-            story_id=story_data['id'],
             defaults={
                 'title': story_data.get('title', ''),
                 'fetched': True,

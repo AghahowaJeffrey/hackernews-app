@@ -1,17 +1,17 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from .views import (
-    LatestStoriesView, 
-    TopStoriesView, 
-    FilteredStoriesView, 
-    StorySearchView, 
-    StoryDetailView )
-
+from .views import *
+    # LatestStoriesView, 
+    # TopStoriesView, 
+    # FilteredStoriesView, 
+    # StorySearchView, 
+    # StoryDetailView
+    
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
+    path('api/user/', include('user.urls')),
     path('latest-stories/', LatestStoriesView.as_view(), name='latest-stories'), #/latest-stories/
     path('top-stories/', TopStoriesView.as_view(), name='top-stories'), #/top-stories/
     path('filtered-stories/', FilteredStoriesView.as_view(), name='filtered-stories'), #/filtered-stories/?filter=

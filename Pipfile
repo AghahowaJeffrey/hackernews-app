@@ -12,6 +12,7 @@ httpx = {extras = ["http2"], version = "*"}
 djangorestframework = "*"
 django-filter = "*"
 django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 

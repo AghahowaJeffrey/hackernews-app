@@ -1,15 +1,20 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
+TYPE_OPTIONS = {
+    ('s', 'story'),
+    ('c', 'comment'),
+}
 class Story(models.Model):
-    story_id = models.IntegerField(unique=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True, related_name='story')
     fetched = models.BooleanField(default=True)
     title = models.CharField(max_length=255)
-    by = models.CharField(max_length=255)
-    descendants = models.IntegerField()
-    score = models.IntegerField()
+    by = models.CharField(max_length=255, null=True)
+    descendants = models.IntegerField(default=0)
+    score = models.IntegerField(default=0)
     text = models.TextField()
-    type = models.CharField(max_length=20, default='story')
-    time = models.DateTimeField(editable=True, auto_now_add=True)
+    type = models.CharField(max_length=20, default='story', choices=TYPE_OPTIONS)
+    time = models.DateTimeField(editable=False, auto_now_add=True)
     url = models.URLField(max_length=200, null=True)
 
     def __str__(self):
