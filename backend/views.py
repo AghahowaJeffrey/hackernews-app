@@ -1,9 +1,8 @@
 
-from django.shortcuts import render, redirect
-
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 
 from .serializers import StorySerializer
@@ -58,7 +57,7 @@ class StoryCreationView(generics.ListCreateAPIView):
     renderer_classes = [UserRenderer]
     queryset = Story.objects.all()
     serializer_class = StorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = []
 
     def perfom_create(self, serializer, format=None):
         serializer.save(user=self.request.user)
@@ -69,7 +68,7 @@ class StoryCreationView(generics.ListCreateAPIView):
 class StoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = []
 
     def perform_destroy(self, instance, format=None):
         if instance.fetched:

@@ -5,8 +5,10 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
 from .renderers import UserRenderer
-from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token 
+from rest_framework import serializers
+from rest_framework import authentication
 
 
 def get_token_for_user(user):
@@ -36,19 +38,29 @@ class UserRegistrationView(APIView):
 class UserLoginView(APIView):
 	def post(self, request, format=None):
 		# create a user login serializer instance
+		print(request.data) 
 		serializer = UserLoginSerializer(data=request.data)
 		if serializer.is_valid(raise_exception=True):
-			email = serializer.data.get('email')
-			password = serializer.data.get('password')
-			user = authenticate(email=email, password=password)
-			if user is not None:
-				token = get_token_for_user(user)
-				return Response({'token':token, 'msg':'Login Successful'}, status=status.HTTP_200_OK)
-			return Response({'errors':{'non_field_errors':['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
+			print(request.data) 
+			email = request.data.get('email')
+			password = request.data.get('password')
+			try:
+				print(f"Attempting login with email: {email}, password: {password}")
+				user = authentication.authenticate(request, email=email, password=password)
+				# Question:How is the email & password being compiled
+				print(user)
+				if user is not None:
+					token = get_token_for_user(user=user)
+					return Response({'token':token, 'msg':'Login Successful'}, status=status.HTTP_200_OK)
+				return Response({'errors':{'non_field_errors':['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
+			except Exception as e:
+				# Log the exception for debugging
+				print(f"Authentication failed: {str(e)}")
+				raise serializers.ValidationError('Email or Password is not valid')
 
 
 class UserLogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         refresh_token = request.data.get('token')

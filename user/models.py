@@ -7,7 +7,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
  
 # Custom user manager
 class UserManager(BaseUserManager):
-    def create_user(self, email, username, tc, password=None, password2=None):
+    def create_user(self, email, username, tc, password, password2=None):
         """
         Creates and saves a User with the given email, name, tc and password.
         """
@@ -17,10 +17,10 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),          # Normalize email address to lowercase
             username=username,
+            password=password,
             tc=tc,
         )
 
-        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -48,7 +48,7 @@ class User(AbstractBaseUser):
         unique=True,             # Ensure that email addresses are unique
     )
     username = models.CharField(max_length=200)
-    tc = models.BooleanField()
+    tc = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)           # Indicates Whether the user is active
     is_admin = models.BooleanField(default=False)           # Indicates whether the user is an admin
     created_at = models.DateTimeField(auto_now_add=True)    # Records the creation date and time
@@ -58,7 +58,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = "email"             # Field used for authentication (email instead of username)
-    REQUIRED_FIELDS = ["name", "tc"]     # Additional fields required when creating a user
+    REQUIRED_FIELDS = ["username", "tc"]     # Additional fields required when creating a user
 
     def __str__(self):
         return self.email               # Return the user's email address as a string

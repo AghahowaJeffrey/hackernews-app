@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from user.models import User
+from django.contrib.auth import get_user_model
 
 # for sending a password reset link to email
 # from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
@@ -17,7 +18,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 	# Additional field for confirming the password during registration
 	password2 = serializers.CharField(style={'input_type':'password'}, write_only=True)
 	class Meta:
-		model = User
+		model = get_user_model()
 		fields = ['email', 'username', 'password', 'password2', 'tc']
 		extra_kwargs={
 			'password':{'write_only':True}
@@ -32,15 +33,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 		return attrs
 
 	def create(self, validate_data):
-		return User.objects.create_user(**validate_data)
+		return get_user_model().objects.create_user(**validate_data)
 
 
 
 # Serializer for user login
 class UserLoginSerializer(serializers.ModelSerializer):
 	email = serializers.EmailField(max_length=200)
+	password = serializers.CharField(write_only=True) 
 	class Meta:
-		model = User 
+		model = get_user_model() 
 		fields = ['email', 'password']
 
 
