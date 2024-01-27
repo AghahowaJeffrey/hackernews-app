@@ -16,7 +16,7 @@ from django.contrib.auth import get_user_model
 # Serializer for user registration
 class UserRegistrationSerializer(serializers.ModelSerializer):
 	# Additional field for confirming the password during registration
-	password2 = serializers.CharField(style={'input_type':'password'}, write_only=True)
+	password2 = serializers.CharField(style={'input_type':'password'})
 	class Meta:
 		model = get_user_model()
 		fields = ['email', 'username', 'password', 'password2', 'tc']
